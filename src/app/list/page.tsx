@@ -1,4 +1,7 @@
 /* src/app/list/page.tsx */
+export const dynamic = 'force-dynamic'          // ← live data, no caching
+// export const revalidate = 60                // ← 60-second ISR instead
+
 import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
 
@@ -14,12 +17,12 @@ type Animal = {
 }
 
 export default async function ListPage() {
-  /* ───────── fetch data ───────── */
+  /* fetch */
   const { data: animals, error } = await supabase
     .from('animals')
     .select('*')
     .order('rescue_date', { ascending: false })
-    .returns<Animal[]>() // ✅ type cast here
+    .returns<Animal[]>()      // supabase-js v2 typing
 
   if (error) {
     console.error(error)
@@ -32,7 +35,7 @@ export default async function ListPage() {
     )
   }
 
-  /* ───────── ui ───────── */
+  /* ui */
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-emerald-50 to-teal-100 py-14 px-4">
       <div className="mx-auto max-w-6xl">
@@ -43,8 +46,7 @@ export default async function ListPage() {
           </h1>
           <Link
             href="/"
-            className="rounded-md bg-gray-800/90 px-4 py-2 text-sm font-semibold text-white
-                       shadow hover:bg-gray-900"
+            className="rounded-md bg-gray-800/90 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-gray-900"
           >
             ⬅ Back to menu
           </Link>
@@ -58,8 +60,7 @@ export default async function ListPage() {
             {animals.map((a) => (
               <li
                 key={a.id}
-                className="overflow-hidden rounded-2xl bg-white/80 backdrop-blur-lg
-                           shadow-lg ring-1 ring-black/5 transition hover:shadow-2xl"
+                className="overflow-hidden rounded-2xl bg-white/80 backdrop-blur-lg shadow-lg ring-1 ring-black/5 transition hover:shadow-2xl"
               >
                 {/* photo */}
                 {a.photo_path ? (
@@ -83,9 +84,9 @@ export default async function ListPage() {
                       ? new Date(a.rescue_date).toLocaleDateString()
                       : 'No date'}
                   </p>
-                  {a.status && <p className="text-xs">Status: {a.status}</p>}
+                  {a.status   && <p className="text-xs">Status: {a.status}</p>}
                   {a.location && <p className="text-xs">Location: {a.location}</p>}
-                  {a.notes && (
+                  {a.notes    && (
                     <p className="mt-1 line-clamp-3 text-xs text-gray-600">{a.notes}</p>
                   )}
                 </div>
