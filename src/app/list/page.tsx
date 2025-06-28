@@ -1,3 +1,4 @@
+/* src/app/list/page.tsx */
 import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
 
@@ -13,10 +14,12 @@ type Animal = {
 }
 
 export default async function ListPage() {
+  /* ───────── fetch data ───────── */
   const { data: animals, error } = await supabase
     .from('animals')
-    .select<Animal>('*')
+    .select('*')
     .order('rescue_date', { ascending: false })
+    .returns<Animal[]>() // ✅ type cast here
 
   if (error) {
     console.error(error)
@@ -29,6 +32,7 @@ export default async function ListPage() {
     )
   }
 
+  /* ───────── ui ───────── */
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-emerald-50 to-teal-100 py-14 px-4">
       <div className="mx-auto max-w-6xl">
@@ -82,9 +86,7 @@ export default async function ListPage() {
                   {a.status && <p className="text-xs">Status: {a.status}</p>}
                   {a.location && <p className="text-xs">Location: {a.location}</p>}
                   {a.notes && (
-                    <p className="mt-1 line-clamp-3 text-xs text-gray-600">
-                      {a.notes}
-                    </p>
+                    <p className="mt-1 line-clamp-3 text-xs text-gray-600">{a.notes}</p>
                   )}
                 </div>
               </li>
