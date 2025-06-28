@@ -15,7 +15,7 @@ type Animal = {
 export default async function ListPage() {
   const { data: animals, error } = await supabase
     .from('animals')
-    .select('*')
+    .select<Animal>('*')
     .order('rescue_date', { ascending: false })
 
   if (error) {
