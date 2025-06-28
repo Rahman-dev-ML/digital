@@ -1,8 +1,15 @@
+/* globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+/* make it available via a utility class */
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #efef06;
 }
 
 @theme inline {

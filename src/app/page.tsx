@@ -1,103 +1,84 @@
-import Image from "next/image";
+// src/app/page.tsx
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const router = useRouter()
+  const [showSplash, setShowSplash] = useState(true)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  /* ───────── Switch off splash after 3 s ───────── */
+  useEffect(() => {
+    const t = setTimeout(() => setShowSplash(false), 3000)
+    return () => clearTimeout(t)
+  }, [])
+
+  const splashBg =
+    'https://img1.hscicdn.com/image/upload/f_auto,t_ds_w_1200,q_60/lsci/db/PICTURES/CMS/279100/279100.jpg'
+  const menuBg = '/cirus1.jpeg'       // lives in /public
+
+  return (
+    <div
+      className={`
+        relative flex min-h-screen w-full bg-no-repeat bg-center
+        bg-contain sm:bg-cover transition-[background-image] duration-700
+        ${showSplash
+          ? 'items-center justify-center'
+          : 'items-start md:items-center justify-center pt-[12vh] md:pt-0'}
+      `}
+      style={{ backgroundImage: `url(${showSplash ? splashBg : menuBg})` }}
+    >
+      {/* Dark overlay for readability (30 % instead of 40 %) */}
+      <div className="pointer-events-none absolute inset-0 bg-black/30" />
+
+      {showSplash ? (
+        /* ───────── 3-second SPLASH ───────── */
+        <div className="relative z-10 flex flex-col items-center text-center px-4">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-white drop-shadow-lg">
+            Fizza
+          </h1>
+          <p className="mt-2 max-w-xs md:max-w-md text-lg md:text-2xl font-semibold text-white drop-shadow">
+            Welcome to your digital library
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      ) : (
+        /* ───────── MENU ───────── */
+        <div
+          className={`
+            relative z-10 flex w-full flex-col items-center space-y-8 px-4 text-center
+            /* lift a little on desktop so cat stays visible */
+            md:-translate-y-10
+          `}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          {/* Heading sits above kitty’s head on mobile */}
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg">
+            No Men Allowed
+          </h1>
+
+          <div className="flex flex-col gap-6 md:flex-row">
+            <button
+              onClick={() => router.push('/add')}
+              className="rounded-full bg-gradient-to-br from-blue-500 to-indigo-600
+                         px-8 py-3 text-lg font-semibold text-white shadow-xl
+                         transition duration-200 hover:from-blue-600 hover:to-indigo-700
+                         hover:scale-105"
+            >
+              Add rescued animal
+            </button>
+
+            <button
+              onClick={() => router.push('/list')}
+              className="rounded-full bg-gradient-to-br from-green-500 to-teal-600
+                         px-8 py-3 text-lg font-semibold text-white shadow-xl
+                         transition duration-200 hover:from-green-600 hover:to-teal-700
+                         hover:scale-105"
+            >
+              View rescued animals
+            </button>
+          </div>
+        </div>
+      )}
     </div>
-  );
+  )
 }
